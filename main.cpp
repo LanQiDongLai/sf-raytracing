@@ -1,4 +1,5 @@
 #include <iostream>
+#include "ray.h"
 
 int main() {
     int image_width = 256;
