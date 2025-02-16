@@ -16,13 +16,31 @@ class Vec3 {
 
   Vec3& operator+=(const Vec3& v);
 
+  Vec3& operator-=(const Vec3& v);
+
   Vec3& operator*=(double t);
 
   Vec3& operator/=(double t);
 
+  Vec3 operator+(const Vec3& v) const;
+
+  Vec3 operator-(const Vec3& v) const;
+
+  Vec3 operator*(double t) const;
+
+  Vec3 operator/(double t) const;
+
   double length() const;
 
   double length_squared() const;
+
+  Vec3& operator=(const Vec3& v);
+
+  Vec3 cross(const Vec3& v) const;
+
+  double dot(const Vec3& v) const;
+
+  Vec3 normalize() const;
 
  private:
   double data[3];
