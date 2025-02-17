@@ -4,12 +4,12 @@
 namespace sf {
 class Viewport {
  public:
-  Viewport(int width, int height);
+  Viewport(int width, int height, int focal_length = 1.0);
   ~Viewport();
-  void setFocalLength(double focal_length);
   Vec3 getPixelPos(int x, int y);
  private:
   int width;
   int height;
+  int focal_length;
 };
 };  // namespace sf
