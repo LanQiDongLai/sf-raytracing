@@ -18,7 +18,7 @@ cmake --build build
 To run the executable after building, execute the following command in the root directory of this project:
 
 ```powershell
-./build/sf-raytracing > image.ppm
+./build/sf-raytracing
 ```
 
 # 项目
@@ -41,5 +41,5 @@ cmake --build build
 执行下列指令在项目根目录来运行
 
 ```powershell
-./build/sf-raytracing > image.ppm
+./build/sf-raytracing
 ```
