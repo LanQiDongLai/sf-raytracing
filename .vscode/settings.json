@@ -48,6 +48,13 @@
     "xloctime": "cpp",
     "xmemory": "cpp",
     "xtr1common": "cpp",
-    "optional": "cpp"
+    "optional": "cpp",
+    "fstream": "cpp",
+    "memory_resource": "cpp",
+    "mutex": "cpp",
+    "ratio": "cpp",
+    "stop_token": "cpp",
+    "thread": "cpp",
+    "vector": "cpp"
   }
 }

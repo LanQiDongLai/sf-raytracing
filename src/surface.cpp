@@ -19,7 +19,7 @@ void Surface::setPixel(int x, int y, int r, int g, int b) {
 void Surface::save(const char* filename) {
   std::ofstream ofs(filename);
   ofs << "P3\n" << width << ' ' << height << "\n255\n";
-  for (int j = height - 1; j >= 0; j--) {
+  for (int j = 0; j < height; j++) {
     for (int i = 0; i < width; i++) {
       auto r = framebuffer[(j * width + i) * 3 + 0];
       auto g = framebuffer[(j * width + i) * 3 + 1];

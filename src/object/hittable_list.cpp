@@ -2,6 +2,9 @@
 
 namespace sf {
 
+HittableList::HittableList() {
+}
+
 void HittableList::add(std::shared_ptr<Hittable> object) {
   this->objects.push_back(object);
 }
