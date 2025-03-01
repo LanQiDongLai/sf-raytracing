@@ -5,6 +5,8 @@
 namespace sf {
 Vec3::Vec3(double x, double y, double z) : data{x, y, z} {}
 
+Vec3::Vec3() : data{0, 0, 0} {}
+
 double Vec3::x() const { return data[0]; }
 double Vec3::y() const { return data[1]; }
 double Vec3::z() const { return data[2]; }

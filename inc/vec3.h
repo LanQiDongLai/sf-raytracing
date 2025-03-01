@@ -3,6 +3,7 @@
 namespace sf {
 class Vec3 {
  public:
+  Vec3();
   Vec3(double x, double y, double z);
 
   double x() const;
