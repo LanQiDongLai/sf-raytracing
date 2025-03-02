@@ -6,8 +6,8 @@ Viewport::Viewport(int width, int height, int focal_length)
 
 Viewport::~Viewport() {}
 
-Vec3 Viewport::getPixelPos(int x, int y) {
-  return Vec3((double(x) / width * 2 - 1) * width / height, double(-y) / height * 2 + 1, -focal_length);
+Vec3 Viewport::getPixelPos(double x, double y) {
+  return Vec3((x / width * 2 - 1) * width / height, -y / height * 2 + 1, -focal_length);
 }
 
 }  // namespace sf

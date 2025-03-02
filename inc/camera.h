@@ -15,10 +15,15 @@ class Camera {
  private:
   Color Camera::ray_color(const Ray& r, const Hittable& world);
 
+  Ray get_ray(int j, int i);
+
+  Color sample_on_pixel(int j, int i, const Hittable& world);
+
   Viewport viewport;
   Surface surface;
   static const int surface_width;
   static const int surface_height;
+  static const int samples_per_pixel;
 };
 
 }

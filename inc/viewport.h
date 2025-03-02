@@ -6,7 +6,7 @@ class Viewport {
  public:
   Viewport(int width, int height, int focal_length = 1.0);
   ~Viewport();
-  Vec3 getPixelPos(int x, int y);
+  Vec3 getPixelPos(double x, double y);
  private:
   int width;
   int height;
