@@ -7,6 +7,7 @@ namespace sf {
 const int Camera::surface_width = 800;
 const int Camera::surface_height = 600;
 const int Camera::samples_per_pixel = 10;
+const int Camera::max_depth = 10;
 
 Camera::Camera()
     : surface(surface_width, surface_height),
@@ -24,11 +25,14 @@ void Camera::render(const sf::Hittable& world) {
   surface.save("1.ppm");
 }
 
-Color Camera::ray_color(const Ray& r, const Hittable& world) {
+Color Camera::ray_color(const Ray& r, int depth, const Hittable& world) {
+  if(depth < 0) {
+    return Color(0., 0., 0.);
+  }
   HitRecord rec;
   if (world.hit(r, 0, std::numeric_limits<double>::infinity(), rec)) {
     Vec3 direction = rec.normal + Vec3::random_in_unit_sphere();
-    return ray_color(Ray(rec.p, direction), world) * 0.5;
+    return ray_color(Ray(rec.p, direction), depth - 1, world) * 0.5;
   }
 
   Vec3 unit_direction = r.direction().normalize();
@@ -45,7 +49,7 @@ Color Camera::sample_on_pixel(int j, int i, const sf::Hittable& world) {
   Color final_color(0., 0., 0.);
   for (int k = 0; k < samples_per_pixel; k++) {
     Ray ray = get_ray(j, i);
-    auto color = ray_color(ray, world);
+    auto color = ray_color(ray, max_depth, world);
     final_color += color;
   }
   final_color /= samples_per_pixel;

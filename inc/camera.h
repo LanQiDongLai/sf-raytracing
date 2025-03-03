@@ -13,7 +13,7 @@ class Camera {
   void render(const Hittable& world);
 
  private:
-  Color Camera::ray_color(const Ray& r, const Hittable& world);
+  Color ray_color(const Ray& r, int depth, const Hittable& world);
 
   Ray get_ray(int j, int i);
 
@@ -24,6 +24,7 @@ class Camera {
   static const int surface_width;
   static const int surface_height;
   static const int samples_per_pixel;
+  static const int max_depth;
 };
 
 }
