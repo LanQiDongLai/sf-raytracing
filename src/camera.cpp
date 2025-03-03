@@ -30,7 +30,7 @@ Color Camera::ray_color(const Ray& r, int depth, const Hittable& world) {
     return Color(0., 0., 0.);
   }
   HitRecord rec;
-  if (world.hit(r, 0, std::numeric_limits<double>::infinity(), rec)) {
+  if (world.hit(r, 0.01, std::numeric_limits<double>::infinity(), rec)) {
     Vec3 direction = rec.normal + Vec3::random_in_unit_sphere();
     return ray_color(Ray(rec.p, direction), depth - 1, world) * 0.5;
   }
