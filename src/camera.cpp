@@ -27,7 +27,8 @@ void Camera::render(const sf::Hittable& world) {
 Color Camera::ray_color(const Ray& r, const Hittable& world) {
   HitRecord rec;
   if (world.hit(r, 0, std::numeric_limits<double>::infinity(), rec)) {
-    return (Color(1, 1, 1) + rec.normal) * 0.5;
+    Vec3 direction = rec.normal + Vec3::random_in_unit_sphere();
+    return ray_color(Ray(rec.p, direction), world) * 0.5;
   }
 
   Vec3 unit_direction = r.direction().normalize();
