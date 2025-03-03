@@ -1,6 +1,8 @@
 #include "vec3.h"
+#include "utils/math.h"
 
 #include <cmath>
+#include <numbers>
 
 namespace sf {
 Vec3::Vec3(double x, double y, double z) : data{x, y, z} {}
@@ -72,6 +74,16 @@ Vec3 Vec3::normalize() const {
   return Vec3(data[0] / length(), data[1] / length(), data[2] / length());
 }
 
+Vec3 Vec3::random_in_unit_sphere() {
+  double u = math::random_double(0., 1.);
+  double v = math::random_double(0., 1.);
+  double theta = std::acos(1 - 2 * u);
+  double phi = 2 * std::numbers::pi * v;
+  double x = std::sin(theta) * std::cos(phi);
+  double y = std::sin(theta) * std::sin(phi);
+  double z = std::cos(theta);
+  return Vec3(x, y, z);
+}
 double Vec3::length() const {
   return sqrt(data[0] * data[0] + data[1] * data[1] + data[2] * data[2]);
 }

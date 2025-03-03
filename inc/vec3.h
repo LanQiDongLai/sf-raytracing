@@ -43,6 +43,7 @@ class Vec3 {
 
   Vec3 normalize() const;
 
+  static Vec3 random_in_unit_sphere();
  private:
   double data[3];
 };
