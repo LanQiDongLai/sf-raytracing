@@ -45,6 +45,14 @@ Vec3 Vec3::operator-(const Vec3& v) const {
   return Vec3(data[0] - v.data[0], data[1] - v.data[1], data[2] - v.data[2]);
 }
 
+Vec3 Vec3::operator*(const Vec3& v) const {
+  return Vec3(data[0] * v.data[0], data[1] * v.data[1], data[2] * v.data[2]);
+}
+
+Vec3 Vec3::operator/(const Vec3& v) const {
+  return Vec3(data[0] / v.data[0], data[1] / v.data[1], data[2] / v.data[2]);
+}
+
 Vec3 Vec3::operator*(double t) const {
   return Vec3(t * data[0], t * data[1], t * data[2]);
 }
