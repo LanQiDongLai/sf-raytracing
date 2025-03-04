@@ -1,9 +1,9 @@
 #pragma once
-#include "object/hittable.h"
-#include "viewport.h"
-#include "surface.h"
 #include "color.h"
+#include "object/hittable.h"
 #include "ray.h"
+#include "surface.h"
+#include "viewport.h"
 
 namespace sf {
 
@@ -19,6 +19,7 @@ class Camera {
 
   Color sample_on_pixel(int j, int i, const Hittable& world);
 
+  Color gamma_correction(const Color& color);
   Viewport viewport;
   Surface surface;
   static const int surface_width;
@@ -27,4 +28,4 @@ class Camera {
   static const int max_depth;
 };
 
-}
+}  // namespace sf

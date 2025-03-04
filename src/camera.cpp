@@ -26,7 +26,7 @@ void Camera::render(const sf::Hittable& world) {
 }
 
 Color Camera::ray_color(const Ray& r, int depth, const Hittable& world) {
-  if(depth < 0) {
+  if (depth < 0) {
     return Color(0., 0., 0.);
   }
   HitRecord rec;
@@ -37,11 +37,12 @@ Color Camera::ray_color(const Ray& r, int depth, const Hittable& world) {
 
   Vec3 unit_direction = r.direction().normalize();
   auto a = 0.5 * (unit_direction.y() + 1.0);
-  return Color(1.0, 1.0, 1.0) * (1.0 - a) + Color(0.5, 0.7, 1.0) * a;
+  return Color(1.0, 1.0, 1.0) * (1.0 - a) + Color(0.3, 0.5, 1.0) * a;
 }
 
 Ray Camera::get_ray(int j, int i) {
-  auto pixel_pos = viewport.getPixelPos(j + math::random_double(-0.5, 0.5), i + math::random_double(-0.5, 0.5));
+  auto pixel_pos = viewport.getPixelPos(j + math::random_double(-0.5, 0.5),
+                                        i + math::random_double(-0.5, 0.5));
   return Ray(Vec3(0, 0, 0), pixel_pos);
 }
 
@@ -53,7 +54,12 @@ Color Camera::sample_on_pixel(int j, int i, const sf::Hittable& world) {
     final_color += color;
   }
   final_color /= samples_per_pixel;
-  return final_color;
+  return gamma_correction(final_color);
+}
+
+Color Camera::gamma_correction(const Color& color) {
+  return Color(std::pow(color[0], 1. / 2.2), std::pow(color[1], 1. / 2.2),
+               std::pow(color[2], 1. / 2.2));
 }
 
 }  // namespace sf
