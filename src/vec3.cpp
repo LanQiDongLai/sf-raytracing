@@ -84,6 +84,11 @@ Vec3 Vec3::random_in_unit_sphere() {
   double z = std::cos(theta);
   return Vec3(x, y, z);
 }
+
+Vec3 Vec3::reflect_by(const Vec3& n) const {
+  return *this - n * 2 * this->dot(n);
+}
+
 double Vec3::length() const {
   return sqrt(data[0] * data[0] + data[1] * data[1] + data[2] * data[2]);
 }

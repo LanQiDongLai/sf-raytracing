@@ -44,6 +44,8 @@ class Vec3 {
   Vec3 normalize() const;
 
   static Vec3 random_in_unit_sphere();
+
+  Vec3 reflect_by(const Vec3& n) const;
  private:
   double data[3];
 };

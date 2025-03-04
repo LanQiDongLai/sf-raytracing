@@ -4,9 +4,9 @@
 
 namespace sf {
 
-class Lambertian : public Material {
+class Metal : public Material {
  public:
-  Lambertian(const Color& albedo);
+  Metal(const Color& albedo);
 
   virtual bool scatter(const Ray& r_in, const HitRecord& rec,
                        Color& attenuation, Ray& scattered) const override;
