@@ -1,7 +1,8 @@
 #include "object/sphere.h"
 
 namespace sf {
-Sphere::Sphere(Point center, double radius) : center(center), radius(radius) {}
+Sphere::Sphere(Point center, double radius, std::shared_ptr<Material> material)
+    : center(center), radius(radius), material(material) {}
 bool Sphere::hit(const Ray& r, float ray_tmin, float ray_tmax,
                  HitRecord& rec) const {
   Vec3 oc = r.point() - center;
@@ -26,6 +27,7 @@ bool Sphere::hit(const Ray& r, float ray_tmin, float ray_tmax,
   rec.t = root;
   rec.p = r.at(rec.t);
   rec.normal = (rec.p - center) / radius;
+  rec.material = material;
 
   rec.set_face_normal(r, rec.normal);
   return true;

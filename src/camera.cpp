@@ -2,6 +2,8 @@
 
 #include "utils/math.h"
 
+#include "material/material.h"
+
 namespace sf {
 
 const int Camera::surface_width = 800;
@@ -31,8 +33,12 @@ Color Camera::ray_color(const Ray& r, int depth, const Hittable& world) {
   }
   HitRecord rec;
   if (world.hit(r, 0.01, std::numeric_limits<double>::infinity(), rec)) {
-    Vec3 direction = rec.normal + Vec3::random_in_unit_sphere();
-    return ray_color(Ray(rec.p, direction), depth - 1, world) * 0.5;
+    Ray r_out;
+    Color attenuation;
+    if (rec.material->scatter(r, rec, attenuation, r_out)) {
+      return attenuation * ray_color(r_out, depth - 1, world);
+    }
+    return Color(0., 0., 0.);
   }
 
   Vec3 unit_direction = r.direction().normalize();
