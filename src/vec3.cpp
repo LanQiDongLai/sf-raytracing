@@ -97,6 +97,13 @@ Vec3 Vec3::reflect_by(const Vec3& n) const {
   return *this - n * 2 * this->dot(n);
 }
 
+Vec3 Vec3::refract_by(const Vec3& n, double etai_over_etat) const {
+  double cos_theta = -this->dot(n);
+  Vec3 r_out_parallel = (*this + n * cos_theta) * etai_over_etat;
+  Vec3 r_out_perp = -n * std::sqrt(1.0 - r_out_parallel.length_squared());
+  return r_out_parallel + r_out_perp;
+}
+
 double Vec3::length() const {
   return sqrt(data[0] * data[0] + data[1] * data[1] + data[2] * data[2]);
 }

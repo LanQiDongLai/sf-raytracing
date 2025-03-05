@@ -50,6 +50,8 @@ class Vec3 {
   static Vec3 random_in_unit_sphere();
 
   Vec3 reflect_by(const Vec3& n) const;
+
+  Vec3 refract_by(const Vec3& n, double etai_over_etat) const;
  private:
   double data[3];
 };
