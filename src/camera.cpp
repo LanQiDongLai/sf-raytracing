@@ -3,6 +3,7 @@
 #include "utils/math.h"
 
 #include "material/material.h"
+#include "mat4.h"
 
 namespace sf {
 
@@ -13,7 +14,10 @@ const int Camera::max_depth = 10;
 
 Camera::Camera()
     : surface(surface_width, surface_height),
-      viewport(surface_width, surface_height, 1.0) {}
+      viewport(surface_width, surface_height, 1.0),
+      position(0., 0., 0.),
+      up(0., 1., 0.),
+      lookat(0., 0., -1.) {}
 
 void Camera::render(const sf::Hittable& world) {
   for (int i = 0; i < surface_height; i++) {
@@ -25,6 +29,18 @@ void Camera::render(const sf::Hittable& world) {
     }
   }
   surface.save("1.ppm");
+}
+
+void Camera::setPosition(const Point& pos) {
+  this->position = pos;
+}
+
+void Camera::setLookat(const Point& lookat) {
+  this->lookat = lookat;
+}
+
+void Camera::setUp(const Vec3& up) {
+  this->up = up;
 }
 
 Color Camera::ray_color(const Ray& r, int depth, const Hittable& world) {
@@ -47,9 +63,17 @@ Color Camera::ray_color(const Ray& r, int depth, const Hittable& world) {
 }
 
 Ray Camera::get_ray(int j, int i) {
-  auto pixel_pos = viewport.getPixelPos(j + math::random_double(-0.5, 0.5),
+  Vec3 pixel_pos = viewport.getPixelPos(j + math::random_double(-0.5, 0.5),
                                         i + math::random_double(-0.5, 0.5));
-  return Ray(Vec3(0, 0, 0), pixel_pos);
+  Vec3 right = (lookat - position).cross(up).normalize();
+  Vec3 front = (lookat - position).normalize();
+  Vec3 up = right.cross(front).normalize();
+  Mat4 view_matrix = Mat4(right[0],  up[0], -front[0], 0.,
+                          right[1],  up[1], -front[1], 0.,
+                          right[2],  up[2], -front[2], 0.,
+                          0, 0, 0, 1);
+  auto trans_pixel_pos = view_matrix * pixel_pos;
+  return Ray(position, trans_pixel_pos);
 }
 
 Color Camera::sample_on_pixel(int j, int i, const sf::Hittable& world) {

@@ -22,6 +22,9 @@ int main() {
   world.add(std::make_shared<sf::Sphere>(sf::Point(-1, 0, -1), 0.5, metal));
 
   sf::Camera camera;
+  camera.setPosition(sf::Point(1, 1, 0));
+  camera.setLookat(sf::Point(0, 0, -1));
+  camera.setUp(sf::Vec3(0, 1, 0));
   camera.render(world);
 
   return 0;
