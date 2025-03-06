@@ -1,31 +1,75 @@
 #include <iostream>
 #include <optional>
 
+#include "camera.h"
+#include "material/dielectric.h"
+#include "material/lambertian.h"
+#include "material/metal.h"
 #include "object/hittable_list.h"
 #include "object/sphere.h"
-#include "material/metal.h"
-#include "material/lambertian.h"
-#include "material/dielectric.h"
-#include "camera.h"
+#include "utils/math.h"
 
 int main() {
-  sf::Surface surface(800, 600);
-  sf::Viewport viewport(800, 600, 1.0);
   sf::HittableList world;
-  auto blue_lambertian = std::make_shared<sf::Lambertian>(sf::Color(0.2, 0.5, 1.0));
-  auto gray_lambertian = std::make_shared<sf::Lambertian>(sf::Color(0.8, 0.8, 0.8));
-  auto metal = std::make_shared<sf::Metal>(sf::Color(0.8, 0.8, 0.8), 0.);
-  auto glass = std::make_shared<sf::Dielectric>(1.5);
-  world.add(std::make_shared<sf::Sphere>(sf::Point(0, 0, -1.5), 0.5, blue_lambertian));
-  world.add(std::make_shared<sf::Sphere>(sf::Point(0, -100.5, -1), 100, gray_lambertian));
-  world.add(std::make_shared<sf::Sphere>(sf::Point(1, 0, -1), 0.5, glass));
-  world.add(std::make_shared<sf::Sphere>(sf::Point(-1, 0, -1), 0.5, metal));
 
-  sf::Camera camera;
-  camera.setPosition(sf::Point(1, 1, 0));
-  camera.setLookat(sf::Point(0, 0, -1));
-  camera.setUp(sf::Vec3(0, 1, 0));
-  camera.render(world);
+  auto ground_material = std::make_shared<sf::Lambertian>(sf::Color(0.5, 0.5, 0.5));
+  world.add(std::make_shared<sf::Sphere>(sf::Point(0, -1000, 0), 1000,
+                                         ground_material));
 
-  return 0;
+  for (int a = -11; a < 11; a++) {
+    for (int b = -11; b < 11; b++) {
+      auto choose_mat = sf::math::random_double(0., 1.);
+      sf::Point center(a + 0.9 * sf::math::random_double(0., 1.), 0.2,
+                       b + 0.9 * sf::math::random_double(0., 1.));
+
+      if ((center - sf::Point(4, 0.2, 0)).length() > 0.9) {
+        std::shared_ptr<sf::Material> sphere_material;
+
+        if (choose_mat < 0.8) {
+          // diffuse
+          auto albedo = sf::Vec3(sf::math::random_double(0.5, 1),
+                                 sf::math::random_double(0.5, 1),
+                                 sf::math::random_double(0.5, 1));
+          sphere_material = std::make_shared<sf::Lambertian>(albedo);
+          world.add(
+              std::make_shared<sf::Sphere>(center, 0.2, sphere_material));
+        } else if (choose_mat < 0.95) {
+          // metal
+          auto albedo = sf::Vec3(sf::math::random_double(0.5, 1),
+                                sf::math::random_double(0.5, 1),
+                                sf::math::random_double(0.5, 1));
+          auto fuzz = sf::math::random_double(0, 0.5);
+          sphere_material = std::make_shared<sf::Metal>(albedo, fuzz);
+          world.add(
+              std::make_shared<sf::Sphere>(center, 0.2, sphere_material));
+        } else {
+          // glass
+          sphere_material = std::make_shared<sf::Dielectric>(1.5);
+          world.add(
+              std::make_shared<sf::Sphere>(center, 0.2, sphere_material));
+        }
+      }
+    }
+  }
+
+  auto material1 = std::make_shared<sf::Dielectric>(1.5);
+  world.add(
+      std::make_shared<sf::Sphere>(sf::Point(0.0, 1.0, 0.0), 1.0, material1));
+  auto material1_1 = std::make_shared<sf::Dielectric>(1.00 / 1.50);
+  world.add(
+      std::make_shared<sf::Sphere>(sf::Point(0.0, 1.0, 0.0), 0.8, material1_1));
+
+  auto material2 = std::make_shared<sf::Lambertian>(sf::Color(0.4, 0.2, 0.1));
+  world.add(
+      std::make_shared<sf::Sphere>(sf::Point(-4.0, 1.0, 0.0), 1.0, material2));
+
+  auto material3 = std::make_shared<sf::Metal>(sf::Color(0.7, 0.6, 0.5), 0.0);
+  world.add(
+      std::make_shared<sf::Sphere>(sf::Point(4.0, 1.0, 0.0), 1.0, material3));
+
+  sf::Camera cam;
+  cam.setPosition(sf::Point(13, 2, 3));
+  cam.setLookat(sf::Point(0, 0, 0));
+
+  cam.render(world);
 }
