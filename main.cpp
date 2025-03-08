@@ -55,9 +55,6 @@ int main() {
   auto material1 = std::make_shared<sf::Dielectric>(1.5);
   world.add(
       std::make_shared<sf::Sphere>(sf::Point(0.0, 1.0, 0.0), 1.0, material1));
-  auto material1_1 = std::make_shared<sf::Dielectric>(1.00 / 1.50);
-  world.add(
-      std::make_shared<sf::Sphere>(sf::Point(0.0, 1.0, 0.0), 0.8, material1_1));
 
   auto material2 = std::make_shared<sf::Lambertian>(sf::Color(0.4, 0.2, 0.1));
   world.add(
@@ -70,6 +67,10 @@ int main() {
   sf::Camera cam;
   cam.setPosition(sf::Point(13, 2, 3));
   cam.setLookat(sf::Point(0, 0, 0));
-
+  cam.setFov(20.);
+  cam.setAspectRadio(16. / 9.);
+  cam.setMaxDepth(50);
+  cam.setMultiSample(500);
+  std::printf("Distance: %f\n", (sf::Point(13, 2, 3) - sf::Point(0, 0, 0)).length());
   cam.render(world);
 }

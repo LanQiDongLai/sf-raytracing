@@ -16,23 +16,38 @@ class Camera {
   void setLookat(const Point& lookat);
   void setUp(const Vec3& up);
 
+  void setMaxDepth(int max_depth);
+  void setAspectRadio(double aspect_radio);
+  void setFov(double fov);
+  void setMultiSample(int samples_per_pixel);
+
  private:
+  void init();
+
   Color ray_color(const Ray& r, int depth, const Hittable& world);
 
-  Ray get_ray(int j, int i);
+  Ray get_ray(double j, double i);
 
-  Color sample_on_pixel(int j, int i, const Hittable& world);
+  Color sample_on_pixel(double j, double i, const Hittable& world);
 
   Color gamma_correction(const Color& color);
-  Viewport viewport;
-  Surface surface;
-  static const int surface_width;
-  static const int surface_height;
-  static const int samples_per_pixel;
-  static const int max_depth;
+  // 考虑从外部传入，并修改 Surface 的构造函数
+  int surface_height;
+  double aspect_ratio;
+  int surface_width;
+  
+  int samples_per_pixel;
+  int max_depth;
+  double fov;
+  double focal_length;
+  
   Point position;
   Point lookat;
   Vec3 up;
+
+  Surface surface;
+
+  Viewport viewport;
 };
 
 }  // namespace sf
