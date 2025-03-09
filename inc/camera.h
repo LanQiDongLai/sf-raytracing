@@ -17,9 +17,13 @@ class Camera {
   void setUp(const Vec3& up);
 
   void setMaxDepth(int max_depth);
+  void setSurfaceHeight(int height);
   void setAspectRadio(double aspect_radio);
   void setFov(double fov);
   void setMultiSample(int samples_per_pixel);
+  void setDefocusAngle(double defocus_angle);
+  void setFocusDist(double focus_dist);
+
 
  private:
   void init();
@@ -31,7 +35,7 @@ class Camera {
   Color sample_on_pixel(double j, double i, const Hittable& world);
 
   Color gamma_correction(const Color& color);
-  // 考虑从外部传入，并修改 Surface 的构造函数
+
   int surface_height;
   double aspect_ratio;
   int surface_width;
@@ -39,13 +43,14 @@ class Camera {
   int samples_per_pixel;
   int max_depth;
   double fov;
-  double focal_length;
+  double focus_dist;
+  double defocus_angle;
   
   Point position;
   Point lookat;
   Vec3 up;
-
-  Surface surface;
+  Vec3 right;
+  Vec3 front;
 
   Viewport viewport;
 };

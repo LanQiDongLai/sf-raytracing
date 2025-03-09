@@ -3,7 +3,6 @@
 #include <fstream>
 
 namespace sf {
-
 Surface::Surface(int width, int height) : width(width), height(height) {
   framebuffer = new int[width * height * 3];
 }

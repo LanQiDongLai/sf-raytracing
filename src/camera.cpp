@@ -8,20 +8,21 @@
 namespace sf {
 
 Camera::Camera()
-    : surface_height(600),
+    : surface_height(200),
       aspect_ratio(16. / 9.),
-      surface_width(surface_height * aspect_ratio),
       samples_per_pixel(10),
       max_depth(50),
       fov(20),
-      surface(surface_width, surface_height),
       position(0., 0., 0.),
       up(0., 1., 0.),
-      lookat(0., 0., -1.) {
+      lookat(0., 0., -1.),
+      focus_dist(10.),
+      defocus_angle(0.6) {
 }
 
 void Camera::render(const sf::Hittable& world) {
   init();
+  Surface surface(surface_width, surface_height);
   static double progress = 0.;
   for (int i = 0; i < surface_height; i++) {
     for (int j = 0; j < surface_width; j++) {
@@ -52,6 +53,10 @@ void Camera::setMaxDepth(int max_depth) {
   this->max_depth = max_depth;
 }
 
+void Camera::setSurfaceHeight(int height) {
+  this->surface_height = height;
+}
+
 void Camera::setFov(double fov) {
   this->fov = fov;
 }
@@ -60,16 +65,27 @@ void Camera::setMultiSample(int samples_per_pixel) {
   this->samples_per_pixel = samples_per_pixel;
 }
 
+void Camera::setDefocusAngle(double defocus_angle) {
+  this->defocus_angle = defocus_angle;
+}
+
+void Camera::setFocusDist(double focus_dist) {
+  this->focus_dist = focus_dist;
+}
+
 void Camera::setAspectRadio(double aspect_radio) {
   this->aspect_ratio = aspect_radio;
 }
 
 void Camera::init() {
-  focal_length = (lookat - position).length();
-  viewport.setFocalLength(focal_length);
+  surface_width = surface_height * aspect_ratio;
+  viewport.setFocalLength(focus_dist);
   viewport.setHeight(std::tan(math::degrees_to_radians(fov) / 2) * 2 *
-                     viewport.getFocalLength());
+                      focus_dist);
   viewport.setWidth(viewport.getHeight() * aspect_ratio);
+  right = (lookat - position).cross(up).normalize();
+  front = (lookat - position).normalize();
+  up = right.cross(front).normalize();
 }
 
 Color Camera::ray_color(const Ray& r, int depth, const Hittable& world) {
@@ -90,23 +106,21 @@ Color Camera::ray_color(const Ray& r, int depth, const Hittable& world) {
   auto a = 0.5 * (unit_direction.y() + 1.0);
   return Color(1.0, 1.0, 1.0) * (1.0 - a) + Color(0.3, 0.5, 1.0) * a;
 }
-// 传进来的是 surface 坐标
 Ray Camera::get_ray(double j, double i) {
-  // 传进去的是 viewport 坐标
   Vec3 pixel_pos =
       viewport.getPixelPos((j + math::random_double(-0.5, 0.5)) /
                                surface_width * viewport.getWidth(),
                            (i + math::random_double(-0.5, 0.5)) /
                                surface_height * viewport.getHeight());
-  Vec3 right = (lookat - position).cross(up).normalize();
-  Vec3 front = (lookat - position).normalize();
-  Vec3 up = right.cross(front).normalize();
   Mat4 view_matrix = Mat4(right[0],  up[0], -front[0], 0.,
                           right[1],  up[1], -front[1], 0.,
                           right[2],  up[2], -front[2], 0.,
                           0, 0, 0, 1);
   auto trans_pixel_pos = view_matrix * pixel_pos;
-  return Ray(position, trans_pixel_pos);
+  auto defocus_radius = focus_dist * std::tan(math::degrees_to_radians(defocus_angle / 2));
+  return Ray(position + up * math::random_double(-0.5, 0.5) * defocus_radius +
+                 right * math::random_double(-0.5, 0.5) * defocus_radius,
+             trans_pixel_pos);
 }
 
 Color Camera::sample_on_pixel(double j, double i, const sf::Hittable& world) {

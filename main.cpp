@@ -26,7 +26,6 @@ int main() {
         std::shared_ptr<sf::Material> sphere_material;
 
         if (choose_mat < 0.8) {
-          // diffuse
           auto albedo = sf::Vec3(sf::math::random_double(0.5, 1),
                                  sf::math::random_double(0.5, 1),
                                  sf::math::random_double(0.5, 1));
@@ -34,7 +33,6 @@ int main() {
           world.add(
               std::make_shared<sf::Sphere>(center, 0.2, sphere_material));
         } else if (choose_mat < 0.95) {
-          // metal
           auto albedo = sf::Vec3(sf::math::random_double(0.5, 1),
                                 sf::math::random_double(0.5, 1),
                                 sf::math::random_double(0.5, 1));
@@ -43,7 +41,6 @@ int main() {
           world.add(
               std::make_shared<sf::Sphere>(center, 0.2, sphere_material));
         } else {
-          // glass
           sphere_material = std::make_shared<sf::Dielectric>(1.5);
           world.add(
               std::make_shared<sf::Sphere>(center, 0.2, sphere_material));
@@ -67,10 +64,13 @@ int main() {
   sf::Camera cam;
   cam.setPosition(sf::Point(13, 2, 3));
   cam.setLookat(sf::Point(0, 0, 0));
+  cam.setUp(sf::Vec3(0, 1, 0));
   cam.setFov(20.);
   cam.setAspectRadio(16. / 9.);
-  cam.setMaxDepth(50);
-  cam.setMultiSample(500);
-  std::printf("Distance: %f\n", (sf::Point(13, 2, 3) - sf::Point(0, 0, 0)).length());
+  cam.setMaxDepth(10);
+  cam.setMultiSample(10);
+  cam.setDefocusAngle(0.6);
+  cam.setSurfaceHeight(675);
+  cam.setFocusDist(10.);
   cam.render(world);
 }
