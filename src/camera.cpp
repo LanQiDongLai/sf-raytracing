@@ -118,15 +118,16 @@ Ray Camera::get_ray(double j, double i) {
                           0, 0, 0, 1);
   auto trans_pixel_pos = view_matrix * pixel_pos;
   auto defocus_radius = focus_dist * std::tan(math::degrees_to_radians(defocus_angle / 2));
-  return Ray(position + up * math::random_double(-0.5, 0.5) * defocus_radius +
-                 right * math::random_double(-0.5, 0.5) * defocus_radius,
-             trans_pixel_pos);
+  auto origin = position + up * math::random_double(-0.5, 0.5) * defocus_radius +
+  right * math::random_double(-0.5, 0.5) * defocus_radius;
+  trans_pixel_pos = trans_pixel_pos + position - origin;
+  return Ray(origin, trans_pixel_pos);
 }
 
 Color Camera::sample_on_pixel(double j, double i, const sf::Hittable& world) {
   Color final_color(0., 0., 0.);
   for (int k = 0; k < samples_per_pixel; k++) {
-    Ray ray = get_ray(j, i);
+    Ray ray = get_ray(j + 0.5, i + 0.5);
     auto color = ray_color(ray, max_depth, world);
     final_color += color;
   }

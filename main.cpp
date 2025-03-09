@@ -67,8 +67,8 @@ int main() {
   cam.setUp(sf::Vec3(0, 1, 0));
   cam.setFov(20.);
   cam.setAspectRadio(16. / 9.);
-  cam.setMaxDepth(10);
-  cam.setMultiSample(10);
+  cam.setMaxDepth(50);
+  cam.setMultiSample(500);
   cam.setDefocusAngle(0.6);
   cam.setSurfaceHeight(675);
   cam.setFocusDist(10.);

@@ -24,7 +24,7 @@ double Viewport::getHeight() const { return height; }
 double Viewport::getFocalLength() const { return focal_length; }
 
 Vec3 Viewport::getPixelPos(double x, double y) {
-  return Vec3(x * 2 - width, -y * 2 + height,
+  return Vec3(x - width / 2, -y + height / 2,
               -focal_length);
 }
 
