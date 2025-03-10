@@ -4,6 +4,8 @@ A simple raytracer written in C++. This is a personal project to learn and exper
 
 The output is PPM format file in this project.
 
+![img](imgs/img.png)
+
 # build
 
 Make sure you have installed the CMake build system, and execute the following commands in the root directory of this project to build the executable:
