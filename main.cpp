@@ -5,6 +5,7 @@
 #include "material/dielectric.h"
 #include "material/lambertian.h"
 #include "material/metal.h"
+#include "material/luminous.h"
 #include "object/hittable_list.h"
 #include "object/sphere.h"
 #include "utils/math.h"
@@ -49,7 +50,7 @@ int main() {
     }
   }
 
-  auto material1 = std::make_shared<sf::Dielectric>(1.5);
+  auto material1 = std::make_shared<sf::Luminous>(sf::Color(1.0, 0.5, 0.8));
   world.add(
       std::make_shared<sf::Sphere>(sf::Point(0.0, 1.0, 0.0), 1.0, material1));
 

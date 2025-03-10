@@ -4,7 +4,7 @@ namespace sf {
 
 Lambertian::Lambertian(const Color& albedo) : albedo(albedo) {}
 
-bool Lambertian::scatter(const Ray& r_in, const HitRecord& rec,
+MaterialType Lambertian::scatter(const Ray& r_in, const HitRecord& rec,
                          Color& attenuation, Ray& scattered) const {
   Vec3 scatter_direction = rec.normal + Vec3::random_in_unit_sphere();
   if(scatter_direction.length() < 0.001) {
@@ -12,7 +12,7 @@ bool Lambertian::scatter(const Ray& r_in, const HitRecord& rec,
   }
   scattered = Ray(rec.p, scatter_direction);
   attenuation = albedo;
-  return true;
+  return MaterialType::NonLuminous;
 }
 
 }  // namespace sf

@@ -6,9 +6,15 @@
 
 namespace sf {
 
+enum class MaterialType {
+  Luminous,
+  NonLuminous,
+  BlackHole,
+};
+
 class Material {
  public:
-  virtual bool scatter(const Ray& r_in, const HitRecord& rec, Color& attenuation,
+  virtual MaterialType scatter(const Ray& r_in, const HitRecord& rec, Color& attenuation,
                        Ray& scattered) const = 0;
 };
 

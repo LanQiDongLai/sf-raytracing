@@ -8,7 +8,7 @@ class Lambertian : public Material {
  public:
   Lambertian(const Color& albedo);
 
-  virtual bool scatter(const Ray& r_in, const HitRecord& rec,
+  virtual MaterialType scatter(const Ray& r_in, const HitRecord& rec,
                        Color& attenuation, Ray& scattered) const override;
 
  private:

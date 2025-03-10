@@ -7,7 +7,7 @@ namespace sf {
 Dielectric::Dielectric(double index_of_refraction)
     : index_of_refraction{index_of_refraction} {}
 
-bool Dielectric::scatter(const Ray& r_in, const HitRecord& rec,
+    MaterialType Dielectric::scatter(const Ray& r_in, const HitRecord& rec,
                          Color& attenuation, Ray& scattered) const {
   attenuation = Color(1.0, 1.0, 1.0);
 
@@ -26,7 +26,7 @@ bool Dielectric::scatter(const Ray& r_in, const HitRecord& rec,
   }
 
   scattered = Ray(rec.p, direction);
-  return true;
+  return MaterialType::NonLuminous;
 }
 
 double Dielectric::reflectance(double cosine, double refraction_index) const {

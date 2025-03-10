@@ -4,15 +4,15 @@
 
 namespace sf {
 
-class Dielectric : public Material {
+class Luminous : public Material {
  public:
-  Dielectric(double index_of_refraction);
+  Luminous(const Color& albedo);
+
   virtual MaterialType scatter(const Ray& r_in, const HitRecord& rec,
                        Color& attenuation, Ray& scattered) const override;
 
  private:
-  double reflectance(double cosine, double refraction_index) const;
-  double index_of_refraction;
+  Color albedo;
 };
 
 }  // namespace sf
