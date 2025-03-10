@@ -9,6 +9,8 @@
 #include "object/hittable_list.h"
 #include "object/sphere.h"
 #include "utils/math.h"
+#include "sky/monochrome.h"
+#include "sky/gradient.h"
 
 int main() {
   sf::HittableList world;
@@ -50,7 +52,7 @@ int main() {
     }
   }
 
-  auto material1 = std::make_shared<sf::Luminous>(sf::Color(1.0, 0.5, 0.8));
+  auto material1 = std::make_shared<sf::Luminous>(sf::Color(5., 5., 5.));
   world.add(
       std::make_shared<sf::Sphere>(sf::Point(0.0, 1.0, 0.0), 1.0, material1));
 
@@ -73,5 +75,6 @@ int main() {
   cam.setDefocusAngle(0.6);
   cam.setSurfaceHeight(675);
   cam.setFocusDist(10.);
+  cam.setSky(std::make_shared<sf::Monochrome>(sf::Color(0., 0., 0.)));
   cam.render(world);
 }

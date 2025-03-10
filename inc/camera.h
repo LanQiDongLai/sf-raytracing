@@ -4,6 +4,7 @@
 #include "ray.h"
 #include "surface.h"
 #include "viewport.h"
+#include "sky/sky.h"
 
 namespace sf {
 
@@ -23,7 +24,7 @@ class Camera {
   void setMultiSample(int samples_per_pixel);
   void setDefocusAngle(double defocus_angle);
   void setFocusDist(double focus_dist);
-
+  void setSky(std::shared_ptr<Sky> sky);
 
  private:
   void init();
@@ -53,6 +54,8 @@ class Camera {
   Vec3 front;
 
   Viewport viewport;
+
+  std::shared_ptr<Sky> sky;
 };
 
 }  // namespace sf

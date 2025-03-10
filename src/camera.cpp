@@ -4,6 +4,8 @@
 
 #include "material/material.h"
 #include "mat4.h"
+#include "sky/monochrome.h"
+#include "sky/gradient.h"
 
 namespace sf {
 
@@ -17,7 +19,8 @@ Camera::Camera()
       up(0., 1., 0.),
       lookat(0., 0., -1.),
       focus_dist(10.),
-      defocus_angle(0.6) {
+      defocus_angle(0.6),
+      sky(std::make_shared<Gradient>(sf::Color(0.3, 0.5, 1.0), sf::Color(1.0, 1.0, 1.0))) {
 }
 
 void Camera::render(const sf::Hittable& world) {
@@ -73,6 +76,10 @@ void Camera::setFocusDist(double focus_dist) {
   this->focus_dist = focus_dist;
 }
 
+void Camera::setSky(std::shared_ptr<Sky> sky) {
+  this->sky = sky;
+}
+
 void Camera::setAspectRadio(double aspect_radio) {
   this->aspect_ratio = aspect_radio;
 }
@@ -106,10 +113,7 @@ Color Camera::ray_color(const Ray& r, int depth, const Hittable& world) {
         return Color(0., 0., 0.);
     }
   }
-
-  Vec3 unit_direction = r.direction().normalize();
-  auto a = 0.5 * (unit_direction.y() + 1.0);
-  return Color(1.0, 1.0, 1.0) * (1.0 - a) + Color(0.3, 0.5, 1.0) * a;
+  return sky->get_color(r);
 }
 Ray Camera::get_ray(double j, double i) {
   Vec3 pixel_pos =
