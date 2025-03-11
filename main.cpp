@@ -71,7 +71,7 @@ int main() {
   cam.setFov(20.);
   cam.setAspectRadio(16. / 9.);
   cam.setMaxDepth(50);
-  cam.setMultiSample(500);
+  cam.setMultiSample(100);
   cam.setDefocusAngle(0.6);
   cam.setSurfaceHeight(675);
   cam.setFocusDist(10.);

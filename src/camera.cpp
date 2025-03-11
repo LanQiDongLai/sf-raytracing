@@ -6,6 +6,7 @@
 #include "mat4.h"
 #include "sky/monochrome.h"
 #include "sky/gradient.h"
+#include "utils/threadpool.hpp"
 
 namespace sf {
 
@@ -25,19 +26,27 @@ Camera::Camera()
 
 void Camera::render(const sf::Hittable& world) {
   init();
+  ThreadPool pool(4);
+  std::vector<std::future<void>> results;
   Surface surface(surface_width, surface_height);
-  static double progress = 0.;
+  static int count = 0;
   for (int i = 0; i < surface_height; i++) {
     for (int j = 0; j < surface_width; j++) {
-      progress = ((double)i * surface_width + (double)j) / ((double)surface_width * surface_height);
-      std::cout << "\r" << progress * 100 << "%" << std::flush;
-      auto color = sample_on_pixel(j, i, world);
-      surface.setPixel(j, i, 255 * math::clamp(color[0], 0., 1.),
-                       255 * math::clamp(color[1], 0., 1.),
-                       255 * math::clamp(color[2], 0., 1.));
+      results.emplace_back(pool.submit([this, &world, &surface, j, i]() {
+        auto color = sample_on_pixel(j, i, world);
+        surface.setPixel(j, i, 255 * math::clamp(color[0], 0., 1.),
+                         255 * math::clamp(color[1], 0., 1.),
+                         255 * math::clamp(color[2], 0., 1.));
+        count++;
+        std::printf("\r%.2f%%", 100. * count / (surface_width * surface_height));
+        std::fflush(stdout);
+      }));
     }
   }
-  surface.save("1.ppm");
+  for (auto& result : results) {
+    result.get();
+  }
+  surface.save("img.ppm");
 }
 
 void Camera::setPosition(const Point& pos) {
