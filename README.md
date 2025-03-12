@@ -48,4 +48,4 @@ cmake --build build
 
 ![img](imgs/img.png)
 
-![img](imgs\img2.png)
+![img](imgs/img2.png)
