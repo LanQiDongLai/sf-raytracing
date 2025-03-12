@@ -26,7 +26,7 @@ Camera::Camera()
 
 void Camera::render(const sf::Hittable& world) {
   init();
-  ThreadPool pool(4);
+  ThreadPool pool(17);
   std::vector<std::future<void>> results;
   Surface surface(surface_width, surface_height);
   static int count = 0;
